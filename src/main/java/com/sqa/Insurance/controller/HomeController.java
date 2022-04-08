@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -42,7 +43,22 @@ public class HomeController {
     public String index(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.getName().compareTo("admin") == 0){
-            model.addAttribute("users", userRepository.findAll());
+
+            List<User> users = userRepository.findUsers();
+            long[] amounts = new long[users.size() + 1];
+            for(int i = 0; i<users.size(); i++){
+                if(users.get(i).getSalary() != null && users.get(i).getType() != null){
+                    amounts[i] = (long)(users.get(i).getSalary() * 45/1000);
+                    if(users.get(i).getType().compareTo("THAIS") ==0){
+                        amounts[i] *= 6;
+                    }
+                    else{
+                        amounts[i] *= 12;
+                    }
+                }
+            }
+            model.addAttribute("users", users);
+            model.addAttribute("amounts", amounts);
             return "indexAdmin";
         }
         return "index";
