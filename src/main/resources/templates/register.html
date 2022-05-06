@@ -14,7 +14,8 @@
     <div class="card shadow  mt-5" style="width: 30rem;">
         <div class="card-body p-5">
             <h3 class="card-title mb-5 text-center">Đăng ký tài khoản</h3>
-            <div class="alert alert-danger" role="alert" th:if="${error}" >Tài khoản không tồn tại</div>
+            <div class="alert alert-danger" role="alert" th:if="${error}" >Vui lòng kiểm tra lại thông tin</div>
+            <div class="alert alert-danger" role="alert" th:if="${error1}" >Tài khoản đã được đăng kí</div>
                 <form  th:action="@{/register}" th:object="${user}" method="post">
                     <div class="mb-3">
                         <label class="form-label">Mã số bảo hiểm</label>

@@ -53,6 +53,7 @@
         <div class="card-body d-flex justify-content-center flex-column">
             <h3 class="card-title mb-5">Tạo thông tin người dùng</h3>
             <div class="alert alert-danger" role="alert" th:if="${error}" th:text="${error}"></div>
+
             <form th:action="@{/user}" th:object="${user}" method="post" class="row">
                 <div class="col-6 mb-3 ">
                     <label class="form-label">Họ và tên</label>
