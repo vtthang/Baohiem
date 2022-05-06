@@ -25,6 +25,7 @@
         <div class="card-body d-flex justify-content-center flex-column">
             <h3 class="card-title mb-5 text-center">Tạo thông tin người dùng</h3>
             <div class="alert alert-danger" role="alert" th:if="${error}" th:text="${error}"></div>
+
             <form th:action="@{/user}" th:object="${user}" method="post" class="row">
                 <div class="col-6 mb-3 ">
                     <label class="form-label">Họ và tên</label>
@@ -45,6 +46,7 @@
                 <div class="col-6 mb-4 ">
                     <label class="form-label">Đối tượng</label>
                     <select th:field="*{type}" name="type" class="form-control">
+                        <option value=""></option>
                         <option value="CBCNV">Cán bộ /Công nhân viên chức</option>
                         <option value="LUONG">Lương hưu/ Trợ cấp lao động</option>
                         <option value="THAIS">Thai sản</option>
@@ -64,6 +66,7 @@
                 <div class="col-6 mb-4 ">
                     <label class="form-label">Hạn bảo hiểm</label>
                     <input th:field="*{due_date}" name="due_date" type="date" class="form-control">
+
                 </div>
                 <div class="col-12 d-flex justify-content-end">
                     <button id="btnSubmit" class="btn btn-primary">Thêm</button>

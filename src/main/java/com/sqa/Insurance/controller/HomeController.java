@@ -2,6 +2,7 @@ package com.sqa.Insurance.controller;
 
 import com.sqa.Insurance.model.User;
 import com.sqa.Insurance.repository.UserRepository;
+import com.sqa.Insurance.service.HomeSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,12 +27,17 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class HomeController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    HomeSevice homeSevice;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -79,21 +85,34 @@ public class HomeController {
 
     @PostMapping("/register")
     public String registerPost(@ModelAttribute User user, Model model){
-        User userFound = userRepository.findByUsername(user.getUsername());
+
+        User userFound = homeSevice.findByUsername(user.getUsername());
         if(userFound == null || userFound.getCccd().compareTo(user.getCccd()) !=0 ||
                 userFound.getName().compareTo(user.getName())!=0 ||
-                userFound.getPhone().compareTo(user.getPhone())!=0){
+                userFound.getPhone().compareTo(user.getPhone())!=0 ){
             model.addAttribute("error", true);
             return "register";
-        }else{
-            model.addAttribute(user);
-            return "chooseimg";
         }
+        else if (userFound.getIs_active()== true){
+            model.addAttribute("error1", true);
+        }
+        else{
+
+                model.addAttribute(user);
+                return "chooseimg";
+            }
+
+
+
+
+        return null;
     }
+
 
     @PostMapping("/chooseimg")
     public String chooseimgPost(@ModelAttribute User userReceive, @RequestParam("image_front") MultipartFile multipartFile1,@RequestParam("image_back") MultipartFile multipartFile2) throws IOException {
         User user = userRepository.findByUsername(userReceive.getUsername());
+        user.setIs_active(true);
         String fileName1 =  String.valueOf((int)(Math.random() * 100000)) + StringUtils.cleanPath(multipartFile1.getOriginalFilename());
         user.setImg_front(fileName1);
         String fileName2 =  String.valueOf((int)(Math.random() * 100000)) + StringUtils.cleanPath(multipartFile2.getOriginalFilename());

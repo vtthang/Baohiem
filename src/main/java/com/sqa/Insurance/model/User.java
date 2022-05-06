@@ -36,11 +36,13 @@ public class User {
 
     private String password;
 
-    private Boolean is_active;
+    private  Boolean is_active = false ;
 
     private String payment_date;
 
     private String due_date;
+
+
 
     @Transient
     public String getImgFrontPath() {

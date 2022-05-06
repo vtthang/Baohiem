@@ -25,7 +25,7 @@
         <div class="card-body p-5">
             <h3 class="card-title mb-5 text-center">Thanh toán bảo hiểm</h3>
             <h6 class="card-title mb-5 text-center">Nhập số bảo hiểm y tế và CCCD để tìm tài khoản muốn thanh toán</h6>
-            <div class="alert alert-danger" role="alert" th:if="${error}" >Không tìm thấy tài khoản</div>
+            <div class="alert alert-danger" role="alert" th:if="${error}" >Vui lòng nhập thông tin hợp lệ</div>
             <form  th:action="@{/payment}" th:object="${user}" method="post">
                 <div class="mb-3">
                     <label class="form-label">Mã số bảo hiểm</label>
