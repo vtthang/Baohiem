@@ -1,7 +1,7 @@
 package com.sqa.Insurance.controller;
 
 import com.sqa.Insurance.model.User;
-import com.sqa.Insurance.repository.UserRepository;
+import com.sqa.Insurance.service.HomeSevice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.Authentication;
@@ -21,13 +21,13 @@ import java.util.regex.Pattern;
 @Controller
 public class AdminController {
     @Autowired
-    UserRepository userRepository;
+    HomeSevice homeSevice;
     Model model;
 
     @GetMapping("/user/{id}")
     public String profile(@PathVariable("id") long id, Model model){
 
-        User user = userRepository.findById(id);
+        User user = homeSevice.findUserById(id);
         model.addAttribute(user);
         return "profile";
     }
@@ -70,7 +70,7 @@ public class AdminController {
 
             user.setIs_active(false);
             user.setUsername( String.valueOf((int)(Math.random()*100000)+10000) + String.valueOf((int)(Math.random()*100000)+10000));
-            userRepository.save(user);
+            homeSevice.saveUser(user);
             return "redirect:/";
 
         }catch (Exception e){

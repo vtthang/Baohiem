@@ -34,10 +34,8 @@ import java.util.regex.Pattern;
 public class HomeController {
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     HomeSevice homeSevice;
+
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -50,7 +48,7 @@ public class HomeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.getName().compareTo("admin") == 0){
 
-            List<User> users = userRepository.findUsers();
+            List<User> users = homeSevice.getAllUserExceptAdmin();
             long[] amounts = new long[users.size() + 1];
             for(int i = 0; i<users.size(); i++){
                 if(users.get(i).getSalary() != null && users.get(i).getType() != null){
@@ -111,7 +109,7 @@ public class HomeController {
 
     @PostMapping("/chooseimg")
     public String chooseimgPost(@ModelAttribute User userReceive, @RequestParam("image_front") MultipartFile multipartFile1,@RequestParam("image_back") MultipartFile multipartFile2) throws IOException {
-        User user = userRepository.findByUsername(userReceive.getUsername());
+        User user = homeSevice.findByUsername(userReceive.getUsername());
         user.setIs_active(true);
         String fileName1 =  String.valueOf((int)(Math.random() * 100000)) + StringUtils.cleanPath(multipartFile1.getOriginalFilename());
         user.setImg_front(fileName1);
@@ -119,7 +117,7 @@ public class HomeController {
         user.setImg_back(fileName2);
 
         user.setPassword(passwordEncoder.encode("123456"));
-        User savedUser = userRepository.save(user);
+        User savedUser = homeSevice.saveUser(user);
         String uploadDir = "user-photos/" + savedUser.getId();
         saveFile(uploadDir, fileName1, multipartFile1);
         saveFile(uploadDir, fileName2, multipartFile2);
@@ -129,7 +127,7 @@ public class HomeController {
     @GetMapping("/profile")
     public String profile(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsername(authentication.getName());
+        User user = homeSevice.findByUsername(authentication.getName());
         if(user== null) {
             model.addAttribute("error", true);
             return "profile";
@@ -155,7 +153,7 @@ public class HomeController {
 
     @PostMapping("/payment")
     public String paymentPost(@ModelAttribute User userReceive, Model model){
-        User user = userRepository.findUser(userReceive.getUsername(), userReceive.getCccd());
+        User user = homeSevice.getUserByUsernameAndCCCD(userReceive.getUsername(), userReceive.getCccd());
         if(user== null) {
             model.addAttribute("error", true);
             return "payment";
