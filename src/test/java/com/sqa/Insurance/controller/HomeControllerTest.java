@@ -49,7 +49,7 @@ class HomeControllerTest {
     @Test
     void login() throws Exception {
         User user = new User();
-        mockMvc.perform(get("/login1"))
+        mockMvc.perform(get("/login"))
                 .andDo(print())
                 .andExpect(model().attribute("user", user))
                 .andExpect(view().name("login"));
@@ -85,7 +85,7 @@ class HomeControllerTest {
 
     @Test
     void profile() throws Exception {
-        mockMvc.perform(get("/login1"))
+        mockMvc.perform(get("/login"))
                 .andDo(print())
                 .andExpect(view().name("login"));
     }
